@@ -179,5 +179,8 @@ export function createMd5Timeline(
     'step4+=1.5'
   )
 
+  // 严格确保总时长精确对齐 23.0 秒
+  tl.set({}, {}, 23.0)
+
   return tl
 }

@@ -16,8 +16,6 @@ export function createHttpsTimeline(
   const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
 
   // 快捷获取选择器
-  const clientNode = q('.client-node')
-  const serverNode = q('.server-node')
   const clientStatus = q('.client-status-text')
   const serverStatus = q('.server-status-text')
   const tcpPipe = q('.tcp-pipe-line')
@@ -30,7 +28,6 @@ export function createHttpsTimeline(
   const encryptedStream = q('.encrypted-stream')
   const certBadge = q('.cert-badge')
   const clientVault = q('.client-vault')
-  const mitmZone = q('.mitm-attack-zone')
   const mitmAlert = q('.mitm-alert-box')
   const sessionKeyClient = q('.session-key-client')
   const sessionKeyServer = q('.session-key-server')
@@ -187,14 +184,17 @@ export function createHttpsTimeline(
   tl.to(clientStatus, { textContent: 'SECURE_CONNECTED', duration: 0.3 }, 'step4+=2.8')
   tl.to(serverStatus, { textContent: 'SECURE_CONNECTED', duration: 0.3 }, 'step4+=2.8')
 
-  // 镜头拉远，后续 HTTP 加密数据流全速喷涌传输
+  // 镜头拉远，后续 HTTP 加密数据流淡入显示
   tl.to(encryptedStream, { opacity: 1, duration: 0.6 }, 'step4+=3.2')
   tl.fromTo(
     encryptedStream,
     { strokeDashoffset: 100 },
-    { strokeDashoffset: 0, duration: 2.8, ease: 'none', repeat: -1 },
+    { strokeDashoffset: 0, duration: 2.8, ease: 'none' },
     'step4+=3.2'
   )
+
+  // 严格确保时间轴总时长精确对齐 23.0 秒（杜绝 repeat: -1 导致的无穷时长破坏进度条）
+  tl.set({}, {}, 23.0)
 
   return tl
 }

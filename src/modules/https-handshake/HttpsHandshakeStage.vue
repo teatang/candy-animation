@@ -41,14 +41,14 @@
           class="tcp-pipe-line"
         />
 
-        <!-- 阶段 4 建立的加密高速流 -->
+        <!-- 阶段 4 建立的加密高速流 (利用 CSS 脉冲动画实现无限流动，避免影响 GSAP 时间轴时长) -->
         <path
           d="M 210 230 L 650 230"
           stroke="#10b981"
           stroke-width="6"
           stroke-dasharray="16 8"
           stroke-linecap="round"
-          class="encrypted-stream opacity-0 pointer-events-none"
+          class="encrypted-stream animate-data-pulse opacity-0 pointer-events-none"
         />
       </svg>
 
@@ -209,7 +209,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineExpose } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { useCamera } from '@/composables/useCamera'
 import { createHttpsTimeline } from './timeline'

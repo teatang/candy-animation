@@ -35,9 +35,11 @@
         :min="0"
         :max="100"
         :step="0.1"
+        :marks="sliderMarks"
         :show-tooltip="false"
         class="!my-0"
         @input="handleSliderInput"
+        @change="handleSliderChange"
       />
     </div>
 
@@ -140,12 +142,35 @@ const speedOptions: PlaybackSpeed[] = [0.5, 1, 1.5, 2]
 
 const sliderValue = computed(() => Number((props.progress * 100).toFixed(1)))
 
+// 计算章节阶段在进度条上的分割标记点
+const sliderMarks = computed<Record<number, string>>(() => {
+  if (!props.totalDuration || props.totalDuration <= 0) return {}
+  const marks: Record<number, string> = {}
+  let accum = 0
+  props.steps.forEach((s, idx) => {
+    if (idx > 0) {
+      const pct = Math.round((accum / props.totalDuration) * 100)
+      if (pct > 0 && pct < 100) {
+        marks[pct] = ''
+      }
+    }
+    accum += s.duration
+  })
+  return marks
+})
+
 function handleSliderInput(val: number | number[]): void {
   const numeric = typeof val === 'number' ? val : val[0]
   emit('seekProgress', numeric / 100)
 }
 
+function handleSliderChange(val: number | number[]): void {
+  const numeric = typeof val === 'number' ? val : val[0]
+  emit('seekProgress', numeric / 100)
+}
+
 function formatTime(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return '00:00.0'
   const mins = Math.floor(seconds / 60)
   const secs = (seconds % 60).toFixed(1)
   const minStr = mins < 10 ? `0${mins}` : `${mins}`

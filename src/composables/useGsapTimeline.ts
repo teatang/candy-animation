@@ -36,12 +36,12 @@ export function useGsapTimeline() {
   /**
    * 当前总时长 (秒)
    */
-  const totalDuration = computed(() => timeline.value?.duration() || 0)
+  const totalDuration = ref<number>(0)
 
   /**
-   * 当前播放秒数
+   * 当前播放秒数 (响应式变量，由 onUpdate 与各个操作同步更新)
    */
-  const currentTime = computed(() => (timeline.value ? timeline.value.time() : 0))
+  const currentTime = ref<number>(0)
 
   /**
    * 当前步骤信息
@@ -49,6 +49,21 @@ export function useGsapTimeline() {
   const currentStep = computed(() => {
     return stepsList.value[currentStepIndex.value] || null
   })
+
+  /**
+   * 根据当前时间轴时间计算匹配的步骤索引
+   */
+  function calcStepIndex(time: number): number {
+    const offsets = stepTimeOffsets.value
+    let activeIndex = 0
+    for (let i = offsets.length - 1; i >= 0; i--) {
+      if (time >= offsets[i] - 0.05) {
+        activeIndex = i
+        break
+      }
+    }
+    return activeIndex
+  }
 
   /**
    * 初始化时间轴
@@ -73,34 +88,30 @@ export function useGsapTimeline() {
     })
     stepTimeOffsets.value = offsets
 
-    // 暂停初始状态，设定速率
+    // 暂停初始状态，设定速率与初始数值
     tl.timeScale(playbackSpeed.value)
     tl.pause(0)
     playbackState.value = 'idle'
     progress.value = 0
+    currentTime.value = 0
+    totalDuration.value = Number(tl.duration().toFixed(1))
     currentStepIndex.value = 0
 
     // 注册时间轴更新回调
     tl.eventCallback('onUpdate', () => {
       const p = tl.progress()
       progress.value = Number(p.toFixed(4))
+      currentTime.value = Number(tl.time().toFixed(1))
 
       const t = tl.time()
-      // 计算当前所处的步骤
-      let activeIndex = 0
-      for (let i = offsets.length - 1; i >= 0; i--) {
-        if (t >= offsets[i] - 0.05) {
-          activeIndex = i
-          break
-        }
-      }
-      currentStepIndex.value = activeIndex
+      currentStepIndex.value = calcStepIndex(t)
     })
 
     // 播放完成回调
     tl.eventCallback('onComplete', () => {
       playbackState.value = 'completed'
       progress.value = 1
+      currentTime.value = Number(tl.duration().toFixed(1))
       currentStepIndex.value = steps.length - 1
     })
   }
@@ -146,6 +157,7 @@ export function useGsapTimeline() {
     timeline.value.pause(0)
     playbackState.value = 'idle'
     progress.value = 0
+    currentTime.value = 0
     currentStepIndex.value = 0
   }
 
@@ -159,6 +171,7 @@ export function useGsapTimeline() {
     timeline.value.seek(targetTime)
     currentStepIndex.value = stepIndex
     progress.value = Number(timeline.value.progress().toFixed(4))
+    currentTime.value = Number(timeline.value.time().toFixed(1))
     if (playbackState.value === 'completed') {
       playbackState.value = 'paused'
     }
@@ -185,6 +198,10 @@ export function useGsapTimeline() {
       // 已经是最后一步，直接跳到末尾
       if (timeline.value) {
         timeline.value.seek(timeline.value.duration())
+        currentStepIndex.value = stepsList.value.length - 1
+        progress.value = 1
+        currentTime.value = Number(timeline.value.duration().toFixed(1))
+        playbackState.value = 'completed'
       }
     }
   }
@@ -198,6 +215,9 @@ export function useGsapTimeline() {
     const clamped = Math.max(0, Math.min(1, value))
     timeline.value.progress(clamped)
     progress.value = clamped
+    currentTime.value = Number(timeline.value.time().toFixed(1))
+    currentStepIndex.value = calcStepIndex(timeline.value.time())
+
     if (clamped >= 1) {
       playbackState.value = 'completed'
     } else if (playbackState.value === 'completed') {
