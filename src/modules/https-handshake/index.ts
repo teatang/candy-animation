@@ -5,6 +5,7 @@ import type { AnimationModule } from '@/types/animation'
  */
 export const httpsHandshakeModule: AnimationModule = {
   id: 'https-handshake',
+  categoryId: 'network',
   titleKey: 'modules.https.title',
   summaryKey: 'modules.https.summary',
   categoryKey: 'modules.https.category',

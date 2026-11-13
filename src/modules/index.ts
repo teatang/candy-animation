@@ -1,6 +1,10 @@
-import type { AnimationModule } from '@/types/animation'
+import type { AnimationModule, AnimationCategory } from '@/types/animation'
 import { httpsHandshakeModule } from './https-handshake'
 import { md5AlgorithmModule } from './md5-algorithm'
+import { websocketProtocolModule } from './websocket-protocol'
+import { tcpIpProtocolModule } from './tcp-ip-protocol'
+import { sha256AlgorithmModule } from './sha256-algorithm'
+import { tcpHandshakeWaveModule } from './tcp-handshake-wave'
 
 /**
  * 全局已注册的动画模块清单
@@ -8,7 +12,56 @@ import { md5AlgorithmModule } from './md5-algorithm'
 export const animationModules: AnimationModule[] = [
   httpsHandshakeModule,
   md5AlgorithmModule,
+  websocketProtocolModule,
+  tcpIpProtocolModule,
+  sha256AlgorithmModule,
+  tcpHandshakeWaveModule,
 ]
+
+/**
+ * 动画分类定义清单
+ */
+export const animationCategories: AnimationCategory[] = [
+  {
+    id: 'network',
+    titleKey: 'categories.network.title',
+    descriptionKey: 'categories.network.description',
+    icon: '🌐',
+    color: '#3b82f6',
+    moduleIds: [
+      'tcp-handshake-wave',
+      'tcp-ip-protocol',
+      'websocket-protocol',
+      'https-handshake',
+    ],
+  },
+  {
+    id: 'crypto',
+    titleKey: 'categories.crypto.title',
+    descriptionKey: 'categories.crypto.description',
+    icon: '🔐',
+    color: '#f59e0b',
+    moduleIds: [
+      'sha256-algorithm',
+      'md5-algorithm',
+    ],
+  },
+]
+
+/**
+ * 获取按分类聚合后的模块数据
+ */
+export function getCategorizedModules(): Array<AnimationCategory & { modules: AnimationModule[] }> {
+  return animationCategories.map((cat) => {
+    const modules = cat.moduleIds
+      .map((id) => getModuleById(id))
+      .filter((m): m is AnimationModule => Boolean(m))
+    return {
+      ...cat,
+      modules,
+    }
+  })
+}
 
 /**
  * 默认启用的动画模块 ID

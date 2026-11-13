@@ -5,6 +5,7 @@ import type { AnimationModule } from '@/types/animation'
  */
 export const md5AlgorithmModule: AnimationModule = {
   id: 'md5-algorithm',
+  categoryId: 'crypto',
   titleKey: 'modules.md5.title',
   summaryKey: 'modules.md5.summary',
   categoryKey: 'modules.md5.category',

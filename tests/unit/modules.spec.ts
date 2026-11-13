@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import {
   animationModules,
+  animationCategories,
+  getCategorizedModules,
   DEFAULT_MODULE_ID,
   getModuleById,
   registerModule,
@@ -16,6 +18,24 @@ describe('Animation Module Architecture & Registry', () => {
     expect(httpsMod).toBeDefined()
     expect(md5Mod).toBeDefined()
     expect(DEFAULT_MODULE_ID).toBe('https-handshake')
+  })
+
+  it('should provide categorized modules for navigation and home showcases', () => {
+    expect(animationCategories.length).toBe(2)
+    const catIds = animationCategories.map((c) => c.id)
+    expect(catIds).toContain('network')
+    expect(catIds).toContain('crypto')
+
+    const categorized = getCategorizedModules()
+    expect(categorized).toHaveLength(2)
+
+    const networkCat = categorized.find((c) => c.id === 'network')
+    const cryptoCat = categorized.find((c) => c.id === 'crypto')
+
+    expect(networkCat).toBeDefined()
+    expect(networkCat?.modules.length).toBe(4)
+    expect(cryptoCat).toBeDefined()
+    expect(cryptoCat?.modules.length).toBe(2)
   })
 
   it('should validate module schema and step integrity', () => {

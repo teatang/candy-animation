@@ -41,11 +41,31 @@ export interface AnimationStep {
 }
 
 /**
+ * 动画分类规范
+ */
+export interface AnimationCategory {
+  /** 分类唯一 ID (如 network, crypto) */
+  id: string
+  /** 分类国际化名称 key */
+  titleKey: string
+  /** 分类国际化描述 key */
+  descriptionKey: string
+  /** 分类图标/Emoji */
+  icon: string
+  /** 主题代表色彩 */
+  color: string
+  /** 该分类包含的模块 ID 列表 */
+  moduleIds: string[]
+}
+
+/**
  * 动画模块定义规范
  */
 export interface AnimationModule {
   /** 模块唯一 ID */
   id: string
+  /** 所属大类 ID (如 network, crypto) */
+  categoryId?: string
   /** 国际化名称 key */
   titleKey: string
   /** 国际化简要描述 key */

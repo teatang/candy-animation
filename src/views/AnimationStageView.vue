@@ -52,6 +52,10 @@ import PlaybackControls from '@/components/PlaybackControls.vue'
 import SubtitleCard from '@/components/SubtitleCard.vue'
 import HttpsHandshakeStage from '@/modules/https-handshake/HttpsHandshakeStage.vue'
 import Md5AlgorithmStage from '@/modules/md5-algorithm/Md5AlgorithmStage.vue'
+import WebsocketProtocolStage from '@/modules/websocket-protocol/WebsocketProtocolStage.vue'
+import TcpIpProtocolStage from '@/modules/tcp-ip-protocol/TcpIpProtocolStage.vue'
+import Sha256AlgorithmStage from '@/modules/sha256-algorithm/Sha256AlgorithmStage.vue'
+import TcpHandshakeWaveStage from '@/modules/tcp-handshake-wave/TcpHandshakeWaveStage.vue'
 
 const props = defineProps<{
   moduleId: string
@@ -67,9 +71,22 @@ const currentModule = computed<AnimationModule>(() => {
 
 // 动态对应的舞台组件
 const currentStageComponent = computed(() => {
-  return props.moduleId === 'https-handshake'
-    ? HttpsHandshakeStage
-    : Md5AlgorithmStage
+  switch (props.moduleId) {
+    case 'https-handshake':
+      return HttpsHandshakeStage
+    case 'md5-algorithm':
+      return Md5AlgorithmStage
+    case 'websocket-protocol':
+      return WebsocketProtocolStage
+    case 'tcp-ip-protocol':
+      return TcpIpProtocolStage
+    case 'sha256-algorithm':
+      return Sha256AlgorithmStage
+    case 'tcp-handshake-wave':
+      return TcpHandshakeWaveStage
+    default:
+      return HttpsHandshakeStage
+  }
 })
 
 // 舞台组件实例引用

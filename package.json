@@ -9,7 +9,7 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "test:unit": "vitest run",
-    "deploy": "pnpm build && wrangler deploy",
+    "deploy2cf": "pnpm build && wrangler deploy",
     "deploy:dry-run": "pnpm build && wrangler deploy --dry-run"
   },
   "dependencies": {
