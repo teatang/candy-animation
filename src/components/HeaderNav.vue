@@ -3,8 +3,8 @@
     class="w-full h-16 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between sticky top-0 z-40"
   >
     <!-- 左侧 Logo 与标题 -->
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-candy-purple via-candy-cyan to-candy-pink flex items-center justify-center shadow-md shadow-purple-500/20">
+    <router-link to="/" class="flex items-center gap-3 group">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-candy-purple via-candy-cyan to-candy-pink flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
         <span class="text-white text-lg font-black select-none">🍬</span>
       </div>
       <div class="flex flex-col">
@@ -20,33 +20,43 @@
           {{ t('app.slogan') }}
         </p>
       </div>
-    </div>
+    </router-link>
 
-    <!-- 中间模块切换器 (桌面端展示 Tab / 移动端下拉) -->
+    <!-- 中间模块切换器 (独立 URL 直达 Router Link) -->
     <div class="flex items-center gap-1 sm:gap-2">
       <div class="flex bg-slate-100 dark:bg-slate-800/90 p-1 rounded-xl border border-slate-200 dark:border-slate-700/60">
-        <button
+        <router-link
           v-for="mod in modules"
           :key="mod.id"
+          :to="'/' + mod.id"
           class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5"
           :class="
             currentModuleId === mod.id
               ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-300 shadow-sm'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           "
-          @click="$emit('selectModule', mod.id)"
         >
           <span
             class="w-2 h-2 rounded-full"
             :style="{ backgroundColor: mod.categoryColor }"
           ></span>
           <span>{{ t(mod.titleKey) }}</span>
-        </button>
+        </router-link>
       </div>
     </div>
 
-    <!-- 右侧操作栏 (主题 / 语言 / GitHub) -->
+    <!-- 右侧操作栏 (分享直达链接 / 主题 / 语言 / GitHub) -->
     <div class="flex items-center gap-2">
+      <!-- 复制当前动画直达链接 -->
+      <button
+        class="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1.5 shadow-sm"
+        :title="t('nav.copyDirectUrl')"
+        @click="$emit('copyDirectUrl')"
+      >
+        <span>🔗</span>
+        <span class="hidden md:inline">{{ t('nav.copyDirectUrl') }}</span>
+      </button>
+
       <!-- 国际化语言切换 -->
       <el-dropdown trigger="click" @command="handleLocaleChange">
         <button
@@ -123,8 +133,9 @@ defineProps<{
   currentModuleId: string
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'selectModule', id: string): void
+  (e: 'copyDirectUrl'): void
 }>()
 
 const { t, locale } = useI18n()

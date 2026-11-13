@@ -16,7 +16,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vue-vendor': ['vue', 'vue-i18n', '@vueuse/core'],
+          'vue-vendor': ['vue', 'vue-router', 'vue-i18n', '@vueuse/core'],
           'element-plus': ['element-plus', '@element-plus/icons-vue'],
           gsap: ['gsap'],
         },

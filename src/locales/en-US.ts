@@ -10,6 +10,9 @@ export default {
     theme: 'Toggle Theme',
     language: 'Switch Language',
     modulesList: 'Module Directory',
+    copyDirectUrl: 'Copy Direct Link',
+    copySuccess: 'Direct animation link copied to clipboard!',
+    copyFailed: 'Failed to copy, please copy from address bar',
   },
   theme: {
     light: 'Light Theme',

@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "test:unit": "vitest run"
+    "test:unit": "vitest run",
+    "deploy": "pnpm build && wrangler deploy",
+    "deploy:dry-run": "pnpm build && wrangler deploy --dry-run"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -16,9 +18,11 @@
     "element-plus": "^2.9.4",
     "gsap": "^3.12.7",
     "vue": "^3.5.13",
-    "vue-i18n": "^10.0.5"
+    "vue-i18n": "^10.0.5",
+    "vue-router": "^5.5.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261113.1",
     "@types/node": "^22.13.4",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
@@ -29,7 +33,8 @@
     "typescript": "^5.7.3",
     "vite": "^6.1.0",
     "vitest": "^3.0.5",
-    "vue-tsc": "^2.2.0"
+    "vue-tsc": "^2.2.0",
+    "wrangler": "^4.161.0"
   },
   "packageManager": "pnpm@10.34.9"
 }

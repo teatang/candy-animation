@@ -10,6 +10,9 @@ export default {
     theme: '主题切换',
     language: '语言切换',
     modulesList: '动画索引',
+    copyDirectUrl: '复制直达链接',
+    copySuccess: '动画直达链接已复制到剪贴板！',
+    copyFailed: '复制失败，请手动复制浏览器地址栏',
   },
   theme: {
     light: '浅色明亮',
