@@ -29,6 +29,18 @@ describe('Sidebar Navigation & Home View Component Suite', () => {
     expect(hrefs).toContain('/sha256-algorithm')
     expect(hrefs).toContain('/md5-algorithm')
 
+    // 验证折叠状态下网站图标与四个等大底部按钮
+    const vm = wrapper.vm as any
+    expect(vm.isCollapsed).toBe(false)
+
+    vm.isCollapsed = true
+    await wrapper.vm.$nextTick()
+
+    // 折叠状态下 Logo 图标应该完整存在并未被隐藏
+    const logoIcon = wrapper.find('span.select-none')
+    expect(logoIcon.exists()).toBe(true)
+    expect(logoIcon.text()).toBe('🍬')
+
     wrapper.unmount()
   })
 
