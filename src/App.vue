@@ -5,7 +5,7 @@
 
     <!-- 动态路由内容主舞台区域 -->
     <main class="flex-1 flex flex-col min-w-0 min-h-screen overflow-y-auto relative">
-      <router-view :key="($route.params.moduleId as string) || 'home'" />
+      <router-view :key="($route.params.categoryId as string) || ($route.params.moduleId as string) || 'home'" />
     </main>
   </div>
 </template>

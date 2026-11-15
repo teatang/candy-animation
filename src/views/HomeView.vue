@@ -130,20 +130,33 @@
         >
           <!-- 分类标题栏 -->
           <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="flex items-center gap-3">
+            <router-link
+              :to="'/category/' + cat.id"
+              class="flex items-center gap-3 group hover:opacity-90 transition-opacity"
+            >
               <span class="text-2xl">{{ cat.icon }}</span>
               <div>
-                <h3 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">
-                  {{ t(cat.titleKey) }}
+                <h3 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors flex items-center gap-2">
+                  <span>{{ t(cat.titleKey) }}</span>
+                  <span class="text-xs font-normal opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                 </h3>
                 <p class="text-xs text-slate-500 dark:text-slate-400">
                   {{ t(cat.descriptionKey) }}
                 </p>
               </div>
+            </router-link>
+            <div class="flex items-center gap-2">
+              <router-link
+                :to="'/category/' + cat.id"
+                class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:underline"
+              >
+                <span>进入分类专页</span>
+                <span>→</span>
+              </router-link>
+              <span class="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                {{ cat.modules.length }} 个模块
+              </span>
             </div>
-            <span class="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-500/20">
-              {{ cat.modules.length }} 个模块
-            </span>
           </div>
 
           <!-- 分类下模块网格 -->
@@ -201,9 +214,7 @@
 
               <!-- 卡片底部跳转按钮 -->
               <div class="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-                <span class="text-[11px] font-mono text-slate-400">
-                  URL: /{{ mod.id }}
-                </span>
+                <span class="text-[11px] font-mono text-slate-400"></span>
                 <router-link
                   :to="'/' + mod.id"
                   class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-purple-600/20"

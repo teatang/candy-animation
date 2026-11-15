@@ -10,6 +10,28 @@ describe('Vue Router & Dedicated URL Direct Navigation', () => {
     expect(router.currentRoute.value.name).toBe('Home')
   })
 
+  it('should navigate to category view /category/network', async () => {
+    await router.push('/category/network')
+    await router.isReady()
+    expect(router.currentRoute.value.path).toBe('/category/network')
+    expect(router.currentRoute.value.name).toBe('Category')
+    expect(router.currentRoute.value.params.categoryId).toBe('network')
+  })
+
+  it('should navigate to category view /category/crypto', async () => {
+    await router.push('/category/crypto')
+    await router.isReady()
+    expect(router.currentRoute.value.path).toBe('/category/crypto')
+    expect(router.currentRoute.value.name).toBe('Category')
+    expect(router.currentRoute.value.params.categoryId).toBe('crypto')
+  })
+
+  it('should redirect unknown category to home /', async () => {
+    await router.push('/category/non-existent-cat')
+    await router.isReady()
+    expect(router.currentRoute.value.path).toBe('/')
+  })
+
   it('should navigate directly to dedicated HTTPS animation URL /https-handshake', async () => {
     await router.push('/https-handshake')
     await router.isReady()

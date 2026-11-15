@@ -77,6 +77,30 @@ export function getModuleById(id: string): AnimationModule | undefined {
 }
 
 /**
+ * 根据 ID 检索动画分类
+ * @param id 分类唯一标识符
+ */
+export function getCategoryById(id: string): AnimationCategory | undefined {
+  return animationCategories.find((c) => c.id === id)
+}
+
+/**
+ * 根据分类 ID 获取包含完整模块列表的分类详情
+ * @param id 分类唯一标识符
+ */
+export function getCategoryWithModules(id: string): (AnimationCategory & { modules: AnimationModule[] }) | undefined {
+  const cat = getCategoryById(id)
+  if (!cat) return undefined
+  const modules = cat.moduleIds
+    .map((modId) => getModuleById(modId))
+    .filter((m): m is AnimationModule => Boolean(m))
+  return {
+    ...cat,
+    modules,
+  }
+}
+
+/**
  * 动态注册新动画模块（支持后续扩展插拔）
  * @param mod 符合 AnimationModule 规范的新模块
  */
