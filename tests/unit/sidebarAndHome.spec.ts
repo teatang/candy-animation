@@ -54,7 +54,7 @@ describe('Sidebar Navigation & Home View Component Suite', () => {
     wrapper.unmount()
   })
 
-  it('should mount HomeView with hero banner, stats, and categorized showcase', async () => {
+  it('should mount HomeView with hero banner, stats, and cool category cards without displaying all modules', async () => {
     const wrapper = mount(HomeView, {
       global: {
         plugins: [i18n, router, ElementPlus],
@@ -64,15 +64,21 @@ describe('Sidebar Navigation & Home View Component Suite', () => {
     // 验证核心 DOM 结构与标语
     expect(wrapper.find('.hero-section').exists()).toBe(true)
     expect(wrapper.find('.hero-stats').exists()).toBe(true)
+    expect(wrapper.find('.hero-search').exists()).toBe(true)
     expect(wrapper.findAll('.feature-card')).toHaveLength(3)
 
-    // 验证分类模块卡片
-    const moduleCards = wrapper.findAll('.module-card')
-    expect(moduleCards).toHaveLength(6)
+    // 验证只展示动画分类大卡片 (共 2 个分类)，不需要展示所有分散的动画卡片
+    const categoryCards = wrapper.findAll('.category-card')
+    expect(categoryCards).toHaveLength(2)
 
-    // 验证包含带 ?step=N 的深链按钮
-    const stepLinks = wrapper.findAll('a[href*="?step="]')
-    expect(stepLinks.length).toBeGreaterThan(10)
+    // 验证包含直达对应分类页面的链接
+    const links = wrapper.findAll('a')
+    const hrefs = links.map((l) => l.attributes('href'))
+    expect(hrefs).toContain('/category/network')
+    expect(hrefs).toContain('/category/crypto')
+
+    // 验证不平铺展示详细动画卡片与具体步骤深链
+    expect(wrapper.findAll('.module-card')).toHaveLength(0)
 
     wrapper.unmount()
   })
