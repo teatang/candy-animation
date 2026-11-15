@@ -86,9 +86,19 @@
         </button>
       </div>
 
-      <!-- 右侧倍速选择 -->
-      <div class="flex items-center gap-2">
-        <span class="hidden sm:inline text-xs text-slate-500 dark:text-slate-400 font-semibold">
+      <!-- 右侧：Mermaid 原理图入口与倍速选择 -->
+      <div class="flex items-center gap-2.5">
+        <!-- 醒目常驻的 Mermaid 原理图按钮 -->
+        <button
+          class="mermaid-btn px-3 py-1.5 rounded-xl border border-purple-500/40 bg-purple-500/10 dark:bg-purple-950/50 hover:bg-purple-500/20 text-purple-700 dark:text-purple-300 text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95 group"
+          :title="locale === 'zh-CN' ? '查看当前动画的 Mermaid 架构时序图 / 流程图' : 'View Mermaid Architecture Diagram'"
+          @click="$emit('openMermaid')"
+        >
+          <span class="text-sm group-hover:scale-110 transition-transform">📊</span>
+          <span>{{ locale === 'zh-CN' ? 'Mermaid 原理图' : 'Mermaid Diagram' }}</span>
+        </button>
+
+        <span class="hidden md:inline text-xs text-slate-500 dark:text-slate-400 font-semibold">
           {{ t('playback.speed') }}:
         </span>
         <div class="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -134,9 +144,10 @@ const emit = defineEmits<{
   (e: 'seekProgress', progress: number): void
   (e: 'seekToStep', index: number): void
   (e: 'setSpeed', speed: PlaybackSpeed): void
+  (e: 'openMermaid'): void
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const speedOptions: PlaybackSpeed[] = [0.5, 1, 1.5, 2]
 

@@ -4,14 +4,14 @@
     <header
       class="lg:hidden h-14 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 flex items-center justify-between sticky top-0 z-40"
     >
-      <router-link to="/" class="flex items-center gap-2">
+      <router-link to="/" class="flex items-center gap-2 group">
         <div
-          class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center text-white text-base shadow-sm"
+          class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center text-white text-base shadow-sm shrink-0 candy-logo-box"
         >
-          🍬
+          <span class="candy-icon-emoji select-none">🍬</span>
         </div>
         <span
-          class="font-extrabold text-sm bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent"
+          class="font-extrabold text-sm bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent group-hover:brightness-110 transition-all duration-300"
         >
           {{ t("app.title") }}
         </span>
@@ -84,16 +84,16 @@
           >
             <router-link
               to="/"
-              class="flex items-center gap-2.5"
+              class="flex items-center gap-2.5 group"
               @click="isMobileDrawerOpen = false"
             >
               <div
-                class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center text-white text-base shadow-sm"
+                class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center text-white text-base shadow-sm shrink-0 candy-logo-box"
               >
-                🍬
+                <span class="candy-icon-emoji select-none">🍬</span>
               </div>
               <span
-                class="font-extrabold text-base bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent"
+                class="font-extrabold text-base bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent group-hover:brightness-110 transition-all duration-300"
               >
                 {{ t("app.title") }}
               </span>
@@ -236,33 +236,34 @@
           >
             <router-link
               to="/"
-              class="flex items-center gap-2.5 group overflow-hidden"
+              class="flex items-center gap-2.5 group relative"
+              :class="isCollapsed ? 'justify-center' : ''"
             >
               <div
-                class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform shrink-0"
+                class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center shadow-md shadow-purple-500/20 shrink-0 candy-logo-box"
               >
-                <span class="text-white text-lg font-black select-none"
+                <span class="text-white text-lg font-black select-none candy-icon-emoji"
                   >🍬</span
                 >
               </div>
               <div
                 v-show="!isCollapsed"
-                class="flex flex-col truncate transition-opacity duration-200"
+                class="flex flex-col min-w-0 overflow-hidden transition-opacity duration-200"
               >
                 <div class="flex items-center gap-1.5">
                   <span
-                    class="font-extrabold text-base tracking-tight bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent truncate"
+                    class="font-extrabold text-base tracking-tight bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent truncate group-hover:brightness-110 transition-all duration-300"
                   >
                     {{ t("app.title") }}
                   </span>
                   <span
-                    class="text-[9px] uppercase font-mono px-1 py-0.2 rounded bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-300 font-bold border border-purple-500/20"
+                    class="text-[9px] uppercase font-mono px-1 py-0.2 rounded bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-300 font-bold border border-purple-500/20 shrink-0"
                   >
                     v2.0
                   </span>
                 </div>
                 <span
-                  class="text-[10px] text-slate-400 dark:text-slate-500 truncate"
+                  class="text-[10px] text-slate-400 dark:text-slate-500 truncate transition-colors duration-300 group-hover:text-slate-500 dark:group-hover:text-slate-400"
                 >
                   {{ t("app.subTitle") }}
                 </span>
@@ -669,6 +670,51 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* 糖果 Logo 悬停微动效与发光光晕增强 (温润弹性，杜绝过度跳动与模糊) */
+.candy-logo-box {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.25s ease-out;
+  will-change: transform, box-shadow;
+}
+
+.candy-icon-emoji {
+  display: inline-block;
+  transform: translateZ(0);
+  transform-origin: 50% 50%;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+/* 鼠标悬停：平滑微浮并微增发光，克制优雅，杜绝大幅抖动 */
+.group:hover .candy-logo-box {
+  transform: translateY(-1.5px) scale(1.03);
+  box-shadow: 0 8px 20px -3px rgba(168, 85, 247, 0.35),
+              0 3px 8px -2px rgba(236, 72, 153, 0.2);
+}
+
+/* 鼠标按下：扎实清脆的微回弹 */
+.group:active .candy-logo-box {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 2px 8px -2px rgba(168, 85, 247, 0.25);
+}
+
+/* 鼠标悬停时糖果 Emoji 自然微倾 */
+.group:hover .candy-icon-emoji {
+  transform: rotate(8deg) scale(1.06);
+}
+
+.group:active .candy-icon-emoji {
+  transform: rotate(-3deg) scale(0.96);
+}
+
+/* 暗黑模式下弥散光晕微调强化 */
+:global(html.dark) .group:hover .candy-logo-box {
+  box-shadow: 0 8px 24px -2px rgba(168, 85, 247, 0.45),
+              0 3px 10px -2px rgba(236, 72, 153, 0.3);
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }

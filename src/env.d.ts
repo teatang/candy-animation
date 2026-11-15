@@ -5,3 +5,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'mermaid' {
+  const mermaid: any
+  export default mermaid
+}

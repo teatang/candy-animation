@@ -1,5 +1,24 @@
 <template>
   <div class="flex-1 flex flex-col justify-between overflow-hidden relative">
+    <!-- 顶部左侧快捷操作胶囊 (Mermaid 原理图 / 架构时序图，默认不展示，可点击查看) -->
+    <div class="absolute top-4 left-4 z-30 flex items-center gap-2">
+      <el-tooltip
+        :content="isZh ? '查看当前动画的 Mermaid 架构时序图 / 流程图' : 'View Mermaid Architecture Diagram'"
+        placement="bottom-start"
+      >
+        <button
+          class="mermaid-btn px-3.5 py-2 rounded-xl border border-purple-500/30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-700 dark:text-slate-200 hover:border-purple-500 hover:text-purple-600 dark:hover:text-purple-400 text-xs font-bold flex items-center gap-2 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/25 transition-all active:scale-95 group"
+          @click="isMermaidModalOpen = true"
+        >
+          <span class="text-sm group-hover:scale-110 transition-transform">📊</span>
+          <span>{{ isZh ? 'Mermaid 原理图' : 'Mermaid Diagram' }}</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-300 border border-purple-500/20">
+            查看
+          </span>
+        </button>
+      </el-tooltip>
+    </div>
+
     <!-- 虚拟摄影机动画舞台 -->
     <div class="flex-1 w-full relative flex items-center justify-center min-h-[480px]">
       <CameraStage :camera="camera">
@@ -35,14 +54,22 @@
         @seek-progress="seekProgress"
         @seek-to-step="handleSeekToStep"
         @set-speed="setSpeed"
+        @open-mermaid="isMermaidModalOpen = true"
       />
     </footer>
+
+    <!-- Mermaid 架构原理图弹窗 (默认不展示，用户选择查看) -->
+    <MermaidModal
+      v-model="isMermaidModalOpen"
+      :module-id="props.moduleId"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, nextTick, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, shallowRef, nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getModuleById, animationModules } from '@/modules'
 import type { AnimationModule } from '@/types/animation'
 import { useCamera } from '@/composables/useCamera'
@@ -50,6 +77,7 @@ import { useGsapTimeline } from '@/composables/useGsapTimeline'
 import CameraStage from '@/components/CameraStage.vue'
 import PlaybackControls from '@/components/PlaybackControls.vue'
 import SubtitleCard from '@/components/SubtitleCard.vue'
+import MermaidModal from '@/components/MermaidModal.vue'
 import HttpsHandshakeStage from '@/modules/https-handshake/HttpsHandshakeStage.vue'
 import Md5AlgorithmStage from '@/modules/md5-algorithm/Md5AlgorithmStage.vue'
 import WebsocketProtocolStage from '@/modules/websocket-protocol/WebsocketProtocolStage.vue'
@@ -63,6 +91,13 @@ const props = defineProps<{
 
 const route = useRoute()
 const router = useRouter()
+const { locale } = useI18n()
+
+// 是否中文模式
+const isZh = computed(() => locale.value === 'zh-CN')
+
+// Mermaid 图表模态框显示状态 (默认关闭，用户自主选择查看)
+const isMermaidModalOpen = ref<boolean>(false)
 
 // 当前模块元数据
 const currentModule = computed<AnimationModule>(() => {

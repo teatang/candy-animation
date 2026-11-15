@@ -161,9 +161,17 @@
               </div>
             </div>
 
-            <!-- 卡片底部跳转按钮 -->
+            <!-- 卡片底部操作按钮栏 -->
             <div class="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-              <span class="text-[11px] font-mono text-slate-400"></span>
+              <!-- 查看 Mermaid 图谱按钮 -->
+              <button
+                class="px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+                @click="openModuleMermaid(mod.id)"
+              >
+                <span>📊</span>
+                <span>{{ isZh ? 'Mermaid 原理图' : 'Mermaid Diagram' }}</span>
+              </button>
+
               <router-link
                 :to="'/' + mod.id"
                 class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-md shadow-purple-600/20"
@@ -186,6 +194,12 @@
       </section>
     </div>
 
+    <!-- Mermaid 原理图谱模态框 (默认不展示，点击后查看) -->
+    <MermaidModal
+      v-model="isMermaidModalOpen"
+      :module-id="activeMermaidModuleId"
+    />
+
     <!-- 底部版权栏 -->
     <footer class="w-full py-6 text-center text-xs text-slate-400 border-t border-slate-200/60 dark:border-slate-800/60">
       <span>🍬 糖果动画 (Candy Animation) &copy; 2026. Released under MIT License.</span>
@@ -199,13 +213,24 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import { getCategoryWithModules, animationCategories } from '@/modules'
+import MermaidModal from '@/components/MermaidModal.vue'
 
 const props = defineProps<{
   categoryId: string
 }>()
 
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const isZh = computed(() => locale.value === 'zh-CN')
+
+// Mermaid 图表模态框控制
+const isMermaidModalOpen = ref<boolean>(false)
+const activeMermaidModuleId = ref<string>('tcp-handshake-wave')
+
+function openModuleMermaid(moduleId: string): void {
+  activeMermaidModuleId.value = moduleId
+  isMermaidModalOpen.value = true
+}
 
 const containerRef = ref<HTMLElement | null>(null)
 const allCategories = animationCategories
