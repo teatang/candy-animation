@@ -272,14 +272,17 @@
 
           <!-- 折叠 / 展开切换按钮 -->
           <el-tooltip
+            ref="collapseTooltipRef"
             :content="isCollapsed ? t('sidebar.expand') : t('sidebar.collapse')"
             placement="right"
+            :disabled="isCollapseTooltipDisabled"
+            :hide-after="0"
           >
             <button
-              class="rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 flex items-center justify-center"
+              class="rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 flex items-center justify-center outline-none"
               :class="isCollapsed ? 'w-8 h-8' : 'p-1.5'"
-              :title="isCollapsed ? t('sidebar.expand') : t('sidebar.collapse')"
-              @click="isCollapsed = !isCollapsed"
+              @click="toggleCollapse"
+              @mouseleave="isCollapseTooltipDisabled = false"
             >
               <span v-if="isCollapsed" class="text-xs">▶</span>
               <span v-else class="text-xs">◀</span>
@@ -593,10 +596,22 @@ const { themeMode, setTheme } = useTheme();
 
 // 折叠状态 (桌面端)
 const isCollapsed = ref<boolean>(false);
+// 折叠按钮 Tooltip 控制 (点击后立即隐藏，移开后恢复)
+const collapseTooltipRef = ref<any>(null);
+const isCollapseTooltipDisabled = ref<boolean>(false);
 // 抽屉状态 (移动端)
 const isMobileDrawerOpen = ref<boolean>(false);
 // 全局搜索弹窗状态
 const isSearchOpen = ref<boolean>(false);
+
+function toggleCollapse(e?: MouseEvent): void {
+  isCollapseTooltipDisabled.value = true;
+  isCollapsed.value = !isCollapsed.value;
+  if (e?.currentTarget && typeof (e.currentTarget as HTMLElement).blur === "function") {
+    (e.currentTarget as HTMLElement).blur();
+  }
+  collapseTooltipRef.value?.hide?.();
+}
 
 // 分类清单
 const categoriesList = computed(() => animationCategories);
