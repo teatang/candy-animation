@@ -172,19 +172,11 @@
           </nav>
         </div>
 
-        <!-- 抽屉底部四个等大操作按钮 -->
+        <!-- 抽屉底部三个等大操作按钮 -->
         <div
-          class="pt-4 border-t border-slate-200 dark:border-slate-800 grid grid-cols-4 gap-2"
+          class="pt-4 border-t border-slate-200 dark:border-slate-800 grid grid-cols-3 gap-2"
         >
-          <!-- 1. 复制链接 -->
-          <button
-            class="h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center text-sm"
-            :title="t('nav.copyDirectUrl')"
-            @click="handleCopyDirectUrl"
-          >
-            🔗
-          </button>
-          <!-- 2. 语言切换 -->
+          <!-- 1. 语言切换 -->
           <button
             class="h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center text-xs font-bold"
             :title="t('nav.language')"
@@ -192,7 +184,7 @@
           >
             {{ currentLocale === "zh-CN" ? "中" : "EN" }}
           </button>
-          <!-- 3. 主题切换 -->
+          <!-- 2. 主题切换 -->
           <button
             class="h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center text-sm"
             :title="t('nav.theme')"
@@ -202,7 +194,7 @@
               themeMode === "light" ? "☀️" : themeMode === "dark" ? "🌙" : "💻"
             }}
           </button>
-          <!-- 4. GitHub -->
+          <!-- 3. GitHub -->
           <a
             href="https://github.com/teatang/candy-animation"
             target="_blank"
@@ -413,21 +405,11 @@
         </nav>
       </div>
 
-      <!-- 底部控制区：四个大小完全一致的按钮 (展开为 4 列等大，折叠为居中单列等大) -->
+      <!-- 底部控制区：三个大小完全一致的按钮 (展开为 3 列等大，折叠为居中单列等大) -->
       <div class="pb-3 pt-2 border-t border-slate-100 dark:border-slate-800/80">
-        <!-- 展开状态：4 个等大按钮并排网格 -->
-        <div v-show="!isCollapsed" class="grid grid-cols-4 gap-2 w-full">
-          <!-- 1. 复制链接 -->
-          <el-tooltip :content="t('nav.copyDirectUrl')" placement="top">
-            <button
-              class="h-10 w-full rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center justify-center text-sm shadow-sm"
-              @click="handleCopyDirectUrl"
-            >
-              <span>🔗</span>
-            </button>
-          </el-tooltip>
-
-          <!-- 2. 语言切换 -->
+        <!-- 展开状态：3 个等大按钮并排网格 -->
+        <div v-show="!isCollapsed" class="grid grid-cols-3 gap-2 w-full">
+          <!-- 1. 语言切换 -->
           <el-tooltip :content="t('nav.language')" placement="top">
             <el-dropdown
               trigger="click"
@@ -458,7 +440,7 @@
             </el-dropdown>
           </el-tooltip>
 
-          <!-- 3. 主题切换 -->
+          <!-- 2. 主题切换 -->
           <el-tooltip :content="t('nav.theme')" placement="top">
             <el-dropdown
               trigger="click"
@@ -488,7 +470,7 @@
             </el-dropdown>
           </el-tooltip>
 
-          <!-- 4. GitHub 链接 -->
+          <!-- 3. GitHub 链接 -->
           <el-tooltip :content="t('app.github')" placement="top">
             <a
               href="https://github.com/teatang/candy-animation"
@@ -505,22 +487,12 @@
           </el-tooltip>
         </div>
 
-        <!-- 折叠状态：4 个完全等大的 40x40 (w-10 h-10) 按钮居中垂直排列 -->
+        <!-- 折叠状态：3 个完全等大的 40x40 (w-10 h-10) 按钮居中垂直排列 -->
         <div
           v-show="isCollapsed"
           class="flex flex-col items-center gap-2 w-full"
         >
-          <!-- 1. 复制链接 -->
-          <el-tooltip :content="t('nav.copyDirectUrl')" placement="right">
-            <button
-              class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center justify-center text-sm shadow-sm"
-              @click="handleCopyDirectUrl"
-            >
-              <span>🔗</span>
-            </button>
-          </el-tooltip>
-
-          <!-- 2. 语言切换 -->
+          <!-- 1. 语言切换 -->
           <el-tooltip :content="t('nav.language')" placement="right">
             <el-dropdown
               trigger="click"
@@ -551,7 +523,7 @@
             </el-dropdown>
           </el-tooltip>
 
-          <!-- 3. 主题切换 -->
+          <!-- 2. 主题切换 -->
           <el-tooltip :content="t('nav.theme')" placement="right">
             <el-dropdown
               trigger="click"
@@ -581,7 +553,7 @@
             </el-dropdown>
           </el-tooltip>
 
-          <!-- 4. GitHub 链接 -->
+          <!-- 3. GitHub 链接 -->
           <el-tooltip :content="t('app.github')" placement="right">
             <a
               href="https://github.com/teatang/candy-animation"
@@ -609,7 +581,6 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { ElMessage } from "element-plus";
 import type { ThemeMode } from "@/types/animation";
 import { useTheme } from "@/composables/useTheme";
 import { persistLocale, type SupportedLocale } from "@/locales";
@@ -663,19 +634,6 @@ function toggleThemeQuick(): void {
   const modes: ThemeMode[] = ["light", "dark", "system"];
   const nextIdx = (modes.indexOf(themeMode.value) + 1) % modes.length;
   setTheme(modes[nextIdx]);
-}
-
-async function handleCopyDirectUrl(): Promise<void> {
-  try {
-    const directUrl = window.location.href;
-    await navigator.clipboard.writeText(directUrl);
-    ElMessage.success({
-      message: t("nav.copySuccess"),
-      grouping: true,
-    });
-  } catch {
-    ElMessage.warning(t("nav.copyFailed"));
-  }
 }
 
 // 监听键盘快捷键 Ctrl+K / Cmd+K 唤醒全局搜索

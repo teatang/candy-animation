@@ -33,7 +33,7 @@ describe('Sidebar Navigation & Home View Component Suite', () => {
     expect(hrefs).not.toContain('/sha256-algorithm')
     expect(hrefs).not.toContain('/md5-algorithm')
 
-    // 验证折叠状态下网站图标与四个等大底部按钮
+    // 验证折叠状态下网站图标与三个等大底部按钮
     const vm = wrapper.vm as any
     expect(vm.isCollapsed).toBe(false)
 
