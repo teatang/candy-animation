@@ -275,9 +275,13 @@ async function renderMermaidChart(): Promise<void> {
   isLoading.value = true
   renderError.value = null
 
-  // 若在无真实浏览器的测试环境 (如 jsdom) 中跳过渲染以避免环境缺失 SVG/d3 异常
+  // 若在无真实浏览器的测试环境 (如 jsdom) 或缺少 SVG 布局计算支持的环境中跳过渲染以避免异常
   const isJsdom = typeof navigator !== 'undefined' && (navigator.userAgent.includes('jsdom') || !!(window as any)._jsdom)
-  if (isJsdom || (typeof window !== 'undefined' && !(window as any).SVGElement?.prototype?.getBBox)) {
+  const hasGetBBox = typeof window !== 'undefined' && Boolean(
+    (window as any).SVGGraphicsElement?.prototype?.getBBox ||
+    (window as any).SVGElement?.prototype?.getBBox
+  )
+  if (isJsdom || !hasGetBBox) {
     renderedSvg.value = `<div class="p-6 text-center text-xs text-slate-400 font-mono">Mermaid SVG Preview (${diagramData.value.diagramTypeZh})</div>`
     isLoading.value = false
     return
